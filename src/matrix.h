@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <algorithm>
+#include<algorithm>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
@@ -18,24 +18,17 @@ public:
 	int n;
 	matrix<T>(std::vector<std::vector<T>> B) {
 		m = int(B.size());
-		if (not std::is_same<std::type_info(B[0]), std::vector<T>>) {
-			n = m;
-			m = 1;
-		}
-		else {
-			n = int(B[0].size());
-		}
+		n = int(B[0].size());
+
 		X = B;
 	};
 
 	T get(int i, int j) {
-		if (m != 1){ return X[i - 1][j - 1]; }
-		else { return X[j - 1]; }
+		return X[i - 1][j - 1];
 	}
 
 	void rep(int i, int j, T n) {
-		if (m != 1) { X[i - 1][j - 1] = n; }
-		else { X[j - 1] = n; }
+		X[i - 1][j - 1] = n;
 	}
 
 };
@@ -119,7 +112,7 @@ T Tr(matrix<T> B) {
 
 
 template <typename T>
-void show(matrix<T> B, int precision=5) {
+void show(matrix<T> B, int precision = 5) {
 	for (int i = 1; i <= B.m; ++i) {
 		for (int j = 1; j <= B.n; ++j) {
 			if (precision != 0) {
@@ -210,7 +203,7 @@ matrix<T> operator-(matrix<T> a, matrix<T> b) {
 
 template <typename T>
 matrix<double> operator*(double a, matrix<T> b) {
- 	for (int i = 1; i <= b.m; ++i) {
+	for (int i = 1; i <= b.m; ++i) {
 		for (int j = 1; j <= b.n; ++j) {
 			b.rep(i, j, a * b.get(i, j) * 1.0);
 		}
@@ -228,4 +221,3 @@ matrix<double> operator*(matrix<T> b, double a) {
 	}
 	return b;
 }
-};
