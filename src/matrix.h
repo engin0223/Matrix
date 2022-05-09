@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include<algorithm>
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
