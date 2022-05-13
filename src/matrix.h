@@ -188,18 +188,31 @@ std::vector<matrix<T>> LU(matrix<T> B) {
 template <typename T>
 void show(matrix<T> B, int precision = 5) {
 	for (int i = 1; i <= B.m; ++i) {
-		std::vector<T> values(B.n);
-		for (int k = 1; k <= B.n; ++k) {
-			if (B.get(i, k) < 0) {
-				values[k - 1] = -B.get(i, k) * 10;
+		for (int j = 1; j <= B.n; ++j) {
+			std::vector<T> values(B.n);
+			for (int k = 1; k <= B.n; ++k) {
+				values[k - 1] = B.get(k, j);
+			}
+			int max_length = 7;
+			int max_num = *std::max_element(values.begin(), values.end());
+			if (max_num == 0) {
+				for (int k = 1; k <= B.n; ++k) {
+					if (values[k - 1] < 0) { max_length = 8; break; }
+				}
 			}
 			else {
-				values[k - 1] = B.get(i, k);
+				int max_length = 0;
+				if (0 <= max_num < 10) {
+					max_length = 7;
+				}
+				else if (-10 < max_num < 0) {
+					max_length = 8;
+				}
+				else {
+					max_length = trunc(log10(*std::max_element(values.begin(), values.end(),
+						[](const int& a, const int& b) {return abs(a) < abs(b); }))) + 2 + precision;
+				}
 			}
-		}
-		int max = trunc(log10(*std::max_element(values.begin(), values.end(),
-			[](const int& a, const int& b) {return abs(a) < abs(b); }))) + 2 + precision;
-		for (int j = 1; j <= B.n; ++j) {
 			if (precision != 0) {
 				std::cout << std::setw(precision + 2) << std::setfill(' ') << std::fixed << std::setprecision(precision) << B.get(i, j);
 			}
@@ -207,11 +220,17 @@ void show(matrix<T> B, int precision = 5) {
 				std::cout << std::setw(1) << std::setfill(' ') << std::fixed << std::setprecision(0) << B.get(i, j);
 			}
 			if (j != B.n) { 
-				int dec = trunc(log10(abs(B.get(i, j)))) + 2 + precision;
-				if (B.get(i, j) < 0) {
-					dec++;
+				int dec = 0;
+				if (0 <= B.get(i, j) && B.get(i, j) < 10) {
+					dec = 7;
 				}
-				for (int l = 1; l <= max - dec; ++l) {
+				else if (-10 < B.get(i, j) && B.get(i, j) < 0) {
+					dec = 8;
+				}
+				else {
+					dec = trunc(log10(abs(B.get(i, j)))) + 2 + precision;
+				}
+				for (int l = 1; l <= max_length - dec; ++l) {
 					std::cout << " ";
 				}
 				std::cout << " - ";
