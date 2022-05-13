@@ -187,8 +187,10 @@ std::vector<matrix<T>> LU(matrix<T> B) {
 // prints a matrix's entries with a precision(default is 5).
 template <typename T>
 void show(matrix<T> B, int precision = 5) {
+	int c;
 	for (int i = 1; i <= B.m; ++i) {
 		for (int j = 1; j <= B.n; ++j) {
+			c = 0;
 			std::vector<T> values(B.n);
 			for (int k = 1; k <= B.n; ++k) {
 				values[k - 1] = B.get(k, j);
@@ -197,7 +199,7 @@ void show(matrix<T> B, int precision = 5) {
 			int max_num = *std::max_element(values.begin(), values.end());
 			if (max_num == 0) {
 				for (int k = 1; k <= B.n; ++k) {
-					if (values[k - 1] < 0) { max_length = 8; break; }
+					if (values[k - 1] < 0) { max_length = 8; c = 1 ; break; }
 				}
 			}
 			else {
@@ -206,6 +208,7 @@ void show(matrix<T> B, int precision = 5) {
 				}
 				else if (-10 < max_num < 0) {
 					max_length = 8;
+					c = 1;
 				}
 				else {
 					max_length = trunc(log10(*std::max_element(values.begin(), values.end(),
@@ -213,9 +216,15 @@ void show(matrix<T> B, int precision = 5) {
 				}
 			}
 			if (precision != 0) {
+				if (c && B.get(i, j) > 0) {
+					std::cout << " ";
+				}
 				std::cout << std::setw(precision + 2) << std::setfill(' ') << std::fixed << std::setprecision(precision) << B.get(i, j);
 			}
 			else {
+				if (c && B.get(i, j) > 0) {
+					std::cout << " ";
+				}
 				std::cout << std::setw(1) << std::setfill(' ') << std::fixed << std::setprecision(0) << B.get(i, j);
 			}
 			if (j != B.n) { 
@@ -229,7 +238,10 @@ void show(matrix<T> B, int precision = 5) {
 				else {
 					dec = trunc(log10(abs(B.get(i, j)))) + 2 + precision;
 				}
-				for (int l = 1; l <= max_length - dec; ++l) {
+				for (int l = 1; l < max_length - dec; ++l) {
+					std::cout << " ";
+				}
+				if (not c) {
 					std::cout << " ";
 				}
 				std::cout << " - ";
