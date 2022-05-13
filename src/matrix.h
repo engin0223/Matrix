@@ -201,7 +201,6 @@ void show(matrix<T> B, int precision = 5) {
 				}
 			}
 			else {
-				int max_length = 0;
 				if (0 <= max_num < 10) {
 					max_length = 7;
 				}
